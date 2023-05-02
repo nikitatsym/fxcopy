@@ -3,6 +3,7 @@ package com.example.fxcopy;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -55,14 +56,10 @@ public class CopyController {
     @FXML
     public void initialize() {
         stopCopyButton.setDisable(true);
-        config = loadConfig();
+        startCopyButton.setDisable(true);
         executorService = Executors.newSingleThreadExecutor();
 
-        sourcePath = Paths.get(config.getProperty("sourceFilePath"));
-        targetPath = Paths.get(config.getProperty("targetFilePath"));
-
-        fromLabel.setText(sourcePath.toString());
-        toLabel.setText(targetPath.toString());
+        checkPaths();
     }
 
     @FXML
@@ -141,7 +138,54 @@ public class CopyController {
             if (removeIfInterrupted) {
                 Files.deleteIfExists(targetPath);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private void setError(boolean state) {
+        startCopyButton.setDisable(state);
+    }
+
+    private void validatePaths() {
+        boolean error = false;
+        if (!Files.exists(sourcePath)) {
+            fromLabel.getStyleClass().add("errorPath");
+            fromLabel.setText(fromLabel.getText() + " (does not exist)");
+            error = true;
+        } else if (Files.isDirectory(sourcePath)) {
+            fromLabel.getStyleClass().add("errorPath");
+            fromLabel.setText(fromLabel.getText() + " (not a file)");
+            error = true;
+        } else {
+            fromLabel.getStyleClass().remove("errorPath");
+        }
+
+        if (!Files.exists(targetPath.getParent())) {
+            toLabel.getStyleClass().add("errorPath");
+            toLabel.setText(toLabel.getText() + " (directory does not exist)");
+            error = true;
+        } else if (Files.isDirectory(targetPath)) {
+            toLabel.getStyleClass().add("errorPath");
+            toLabel.setText(toLabel.getText() + " (is a directory)");
+            error = true;
+        } else {
+            toLabel.getStyleClass().remove("errorPath");
+        }
+
+        setError(error);
+
+    }
+
+    private void checkPaths() {
+        config = loadConfig();
+        sourcePath = Paths.get(config.getProperty("sourceFilePath"));
+        targetPath = Paths.get(config.getProperty("targetFilePath"));
+
+        fromLabel.setText(sourcePath.toString());
+        toLabel.setText(targetPath.toString());
+
+        validatePaths();
     }
 
 }
