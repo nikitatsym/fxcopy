@@ -122,7 +122,7 @@ public class CopyController {
     }
 
 
-    public static void copyFile(Path sourcePath, Path targetPath, Consumer<Double> progressCallback, boolean removeIfInterrupted) throws IOException {
+    public static void copyFile(Path sourcePath, Path targetPath, Consumer<Double> progressCallback, boolean removeIfInterrupted) {
         try (FileChannel source = FileChannel.open(sourcePath);
              FileChannel target = FileChannel.open(targetPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
             long totalBytes = source.size();
@@ -135,7 +135,11 @@ public class CopyController {
             }
         } catch (ClosedByInterruptException e) {
             if (removeIfInterrupted) {
-                Files.deleteIfExists(targetPath);
+                try {
+                    Files.deleteIfExists(targetPath);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
