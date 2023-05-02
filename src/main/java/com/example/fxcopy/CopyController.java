@@ -3,7 +3,6 @@ package com.example.fxcopy;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -59,7 +58,7 @@ public class CopyController {
         startCopyButton.setDisable(true);
         executorService = Executors.newSingleThreadExecutor();
 
-        checkPaths();
+        updateAndCheckPaths();
     }
 
     @FXML
@@ -143,6 +142,18 @@ public class CopyController {
         }
     }
 
+
+    private void updateAndCheckPaths() {
+        config = loadConfig();
+        sourcePath = Paths.get(config.getProperty("sourceFilePath"));
+        targetPath = Paths.get(config.getProperty("targetFilePath"));
+
+        fromLabel.setText(sourcePath.toString());
+        toLabel.setText(targetPath.toString());
+
+        validatePaths();
+    }
+
     private void setError(boolean state) {
         startCopyButton.setDisable(state);
     }
@@ -175,17 +186,6 @@ public class CopyController {
 
         setError(error);
 
-    }
-
-    private void checkPaths() {
-        config = loadConfig();
-        sourcePath = Paths.get(config.getProperty("sourceFilePath"));
-        targetPath = Paths.get(config.getProperty("targetFilePath"));
-
-        fromLabel.setText(sourcePath.toString());
-        toLabel.setText(targetPath.toString());
-
-        validatePaths();
     }
 
 }
