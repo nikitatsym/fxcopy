@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="152.0" prefWidth="270.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fxcopy.CopyController">
+
+   <Label styleClass="title" text="Copy file" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="10" />
+   <Label text="From:" styleClass="pathDirection" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="50"/>
+   <Label fx:id="fromLabel" styleClass="path" text="From" AnchorPane.leftAnchor="50" AnchorPane.topAnchor="50"/>
+   <Label text="To:" styleClass="pathDirection" AnchorPane.leftAnchor="10" AnchorPane.topAnchor="70"/>
+   <Label fx:id="toLabel" styleClass="path" text="To" AnchorPane.leftAnchor="50" AnchorPane.topAnchor="70"/>
+
+   <ProgressBar fx:id="copyProgressBar" layoutX="10.0" layoutY="61.0" prefWidth="250" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0" />
+
+   <HBox alignment="CENTER" layoutX="10.0" layoutY="114.8" prefHeight="35.0" prefWidth="250.0" spacing="10" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <Label fx:id="progressLabel" />
+      <Button fx:id="startCopyButton" onAction="#startCopy" text="Start" />
+      <Button fx:id="stopCopyButton" onAction="#stopCopy" text="Stop" />
+   </HBox>
+
+</AnchorPane>
