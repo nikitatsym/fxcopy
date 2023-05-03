@@ -176,7 +176,7 @@ public class CopyController {
             fromLabel.getStyleClass().remove("errorPath");
         }
 
-        if (!Files.exists(targetPath.getParent())) {
+        if (targetPath.getParent() == null || !Files.exists(targetPath.getParent())) {
             toLabel.getStyleClass().add("errorPath");
             toLabel.setText(toLabel.getText() + " (directory does not exist)");
             error = true;
